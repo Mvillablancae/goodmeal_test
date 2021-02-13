@@ -1,16 +1,25 @@
 # goodmeal_test
 
-A new Flutter project.
+# WeatherEveryWhere
+#### GoodMeal Test App
 
-## Getting Started
+WeatherEveryWhere es una aplicación que te permite conocer el pronostico del tiempo en cada parte del mundo!
 
-This project is a starting point for a Flutter application.
+Aplicación desarrollada para el proceso para Desarrollador Flutter.
 
-A few resources to get you started if this is your first Flutter project:
+### Arquitectura
+-------------
+- **View**: Archivos relacionados a la UI de nuestro componente.
+- **Bloc**: Archivos relacionados al manejo de estado de cada componente.
+- **Repository**: Almacenamiento y distribución de datos en la aplicación en tiempo de ejecución.
+- **Models**: Definición de la estructura de datos de cada componente en la aplicación.
+- **Services**: Implementación de API's para la comunicación con servicios externos.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## Diagrama
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Insertar foto.
+
+### Release Pipeline
+-------------
+
+Instrucciónes para el release
