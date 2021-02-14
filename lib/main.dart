@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:goodmeal_test/components/homeScreen/view/homeView.dart';
 
 void main() {
   runApp(WeatherApp());
@@ -11,9 +12,10 @@ class WeatherApp extends StatelessWidget {
       title: 'WeatherEveryWhere',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        fontFamily: 'Montserrat',
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: HomePage(title: 'Flutter Demo Home Page'),
+      home: HomeScreen(),
     );
   }
 }
