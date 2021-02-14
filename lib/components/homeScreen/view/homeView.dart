@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goodmeal_test/components/homeScreen/view/localWeatherCard.dart';
+import 'package:goodmeal_test/core/citiesRepository.dart';
 import 'package:goodmeal_test/widgets/logoWidget.dart';
 import 'package:goodmeal_test/widgets/wewBaseWidget.dart';
 
@@ -72,8 +73,9 @@ class HomeScreen extends StatelessWidget {
             WewTextFormField(
               hintText: "Busca cualquier ciudad del mundo",
               sizingInfo: sizingInfo,
-              onTap: () {
+              onTap: () async {
                 print("Se Apreta Textfield");
+                await CitiesRepository.instance.loadData();
               },
             ),
           ],
