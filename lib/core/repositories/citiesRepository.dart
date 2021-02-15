@@ -10,6 +10,11 @@ class CitiesRepository {
   static CitiesRepository get instance => _instance;
 
   final GeographicDataService _service = GeographicDataService();
+  final TextEditingController _searchFieldController = TextEditingController();
+
+  String get searchingText => _searchFieldController.text;
+
+  
 
   Map<String, List<City>> alphabeticOrderCities = {};
   dynamic countries;
@@ -18,5 +23,4 @@ class CitiesRepository {
     alphabeticOrderCities = await _service.loadCities();
     countries = await _service.loadCountries();
   }
-
 }

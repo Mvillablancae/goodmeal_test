@@ -27,4 +27,9 @@ class GeographicDataService {
     return jsonDecode(
         await rootBundle.loadString("assets/data/countries.json"));
   }
+
+  Future<dynamic> getCityForecast({String lat, String lon}) async {
+    //TODO: Implement Method
+  }
+
 }
