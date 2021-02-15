@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:goodmeal_test/core/repositories/citiesRepository.dart';
 
+
 class WewTextFormField extends StatelessWidget {
   WewTextFormField({
     Key key,
@@ -8,6 +9,7 @@ class WewTextFormField extends StatelessWidget {
     @required this.sizingInfo,
     this.onTap,
     this.onChange,
+    this.suffix,
   }) : super(key: key);
 
   final String hintText;
@@ -16,6 +18,7 @@ class WewTextFormField extends StatelessWidget {
   final Function(String) onChange;
   final TextEditingController _controller =
       CitiesRepository.instance.textController;
+  final Widget suffix;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +29,7 @@ class WewTextFormField extends StatelessWidget {
         onChanged: onChange,
         controller: _controller,
         decoration: InputDecoration(
+          suffix: suffix,
           filled: true,
           hintText: hintText,
           hintStyle: TextStyle(color: Color(0XFFAAAAAA), fontSize: 18.0),
