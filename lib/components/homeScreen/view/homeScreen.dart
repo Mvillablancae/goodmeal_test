@@ -5,9 +5,9 @@ import 'package:goodmeal_test/components/homeScreen/view/localWeatherCard.dart';
 import 'package:goodmeal_test/components/search/bloc/search_bloc.dart';
 import 'package:goodmeal_test/components/search/view/searchScreen.dart';
 import 'package:goodmeal_test/core/repositories/citiesRepository.dart';
+import 'package:goodmeal_test/widgets/loadingScreen.dart';
 import 'package:goodmeal_test/widgets/logoWidget.dart';
 import 'package:goodmeal_test/widgets/wewBaseWidget.dart';
-import 'package:goodmeal_test/utils/colors.dart' as colors;
 
 import 'package:goodmeal_test/widgets/wewTextFormField.dart';
 
@@ -59,24 +59,7 @@ class HomeScreen extends StatelessWidget {
                 ),
               );
             else
-              return WewBaseWidget(
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(sizingInfo.maxHeight * 0.04),
-                        child: Container(
-                            height: sizingInfo.maxHeight * 0.12,
-                            child: Image.asset('assets/img/Logo.png')),
-                      ),
-                      CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      ),
-                    ],
-                  ),
-                ),
-              );
+              return LoadingScreen(sizingInfo: sizingInfo);
           });
     });
   }
@@ -117,24 +100,6 @@ class CityForm extends StatelessWidget {
               Hero(
                 tag: 'SearchField',
                 child: WewTextFormField(
-                  suffix: BlocBuilder(
-                    cubit: BlocProvider.of<SearchBloc>(context),
-                    builder: (context, state) => state is SearchLoading
-                        ? Container(
-                            padding: EdgeInsets.only(
-                                right: sizingInfo.maxWidth * 0.08),
-                            height: sizingInfo.maxHeight * 0.02,
-                            width: sizingInfo.maxHeight * 0.02,
-                            child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                  colors.backgroundColor),
-                            ),
-                          )
-                        : Container(
-                            height: 0,
-                            width: 0,
-                          ),
-                  ),
                   hintText: "Busca cualquier ciudad del mundo",
                   sizingInfo: sizingInfo,
                   onChange: (_) async {

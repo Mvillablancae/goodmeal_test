@@ -6,7 +6,6 @@ import 'package:goodmeal_test/components/search/view/selectedCity.dart';
 import 'package:goodmeal_test/core/repositories/citiesRepository.dart';
 import 'package:goodmeal_test/widgets/wewBaseWidget.dart';
 import 'package:goodmeal_test/widgets/wewTextFormField.dart';
-import 'package:goodmeal_test/utils/colors.dart' as colors;
 
 class SearchScreen extends StatelessWidget {
   static const String routeName = '/seachScreen';
@@ -27,24 +26,6 @@ class SearchScreen extends StatelessWidget {
                     child: WewTextFormField(
                       hintText: "Busca cualquier ciudad del mundo",
                       sizingInfo: sizingInfo,
-                      suffix: BlocBuilder(
-                        cubit: BlocProvider.of<SearchBloc>(context),
-                        builder: (context, state) => state is SearchLoading
-                            ? Container(
-                                padding: EdgeInsets.only(
-                                    right: sizingInfo.maxWidth * 0.08),
-                                height: sizingInfo.maxHeight * 0.02,
-                                width: sizingInfo.maxHeight * 0.02,
-                                child: CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                      colors.backgroundColor),
-                                ),
-                              )
-                            : Container(
-                                height: 0,
-                                width: 0,
-                              ),
-                      ),
                       onChange: (text) async {
                         BlocProvider.of<SearchBloc>(context).add(Search(
                             searchString:
@@ -71,25 +52,62 @@ class SearchScreen extends StatelessWidget {
                         shrinkWrap: true,
                         itemCount: state.filteredCities.length,
                         itemBuilder: (context, index) {
-                          return ListTile(
-                              onTap: () {
-                                BlocProvider.of<SearchBloc>(context).add(
-                                    SelectCity(
-                                        city: state.filteredCities[index]));
-                              },
-                              title: Text(
-                                  "${state.filteredCities[index].name}, ${CitiesRepository.instance.countries[state.filteredCities[index].country]['name']}"));
+                          return Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: sizingInfo.maxWidth * 0.1),
+                            child: Column(
+                              children: [
+                                ListTile(
+                                  trailing: Padding(
+                                    padding: EdgeInsets.only(
+                                        right: sizingInfo.maxWidth * 0.05),
+                                    child: Icon(
+                                      Icons.arrow_forward_ios,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    BlocProvider.of<SearchBloc>(context).add(
+                                        SelectCity(
+                                            city: state.filteredCities[index]));
+                                  },
+                                  title: Text(
+                                    "${state.filteredCities[index].name}, ${CitiesRepository.instance.countries[state.filteredCities[index].country]['name']}",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 20),
+                                  ),
+                                ),
+                                Divider(
+                                  color: Colors.white,
+                                  height: 1,
+                                ),
+                              ],
+                            ),
+                          );
                         },
                       );
                     else {
                       return Center(
-                        child: Text("No se encontraron ciudades"),
+                        child: Text(
+                          "No se encontraron ciudades",
+                          style: TextStyle(color: Colors.white),
+                        ),
                       );
                     }
                   } else
                     return Container(
-                      height: 0,
-                      width: 0,
+                      height: sizingInfo.maxHeight * 0.2,
+                      width: sizingInfo.maxWidth,
+                      child: Center(
+                        child: Container(
+                          height: sizingInfo.maxWidth * 0.1,
+                          width: sizingInfo.maxWidth * 0.1,
+                          child: CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        ),
+                      ),
                     );
                 },
               ),

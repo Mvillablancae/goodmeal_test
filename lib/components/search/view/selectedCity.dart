@@ -6,9 +6,11 @@ class SelectedCityScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, sizingInfo) {
-      return WewBaseWidget(child: 
-        Container()
-      );
+      return WewBaseWidget(child: Column(
+        children: [
+          Container(height: 100,color: Colors.red,),
+        ],
+      ));
     });
   }
 }
