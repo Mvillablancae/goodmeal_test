@@ -12,9 +12,11 @@ class CitiesRepository {
   final GeographicDataService _service = GeographicDataService();
   final TextEditingController _searchFieldController = TextEditingController();
 
+  TextEditingController get textController => _searchFieldController;
+
   String get searchingText => _searchFieldController.text;
 
-  
+
 
   Map<String, List<City>> alphabeticOrderCities = {};
   dynamic countries;

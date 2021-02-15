@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:goodmeal_test/components/homeScreen/bloc/home_bloc.dart';
 import 'package:goodmeal_test/components/homeScreen/view/localWeatherCard.dart';
+import 'package:goodmeal_test/components/search/view/searchScreen.dart';
 import 'package:goodmeal_test/core/repositories/citiesRepository.dart';
 import 'package:goodmeal_test/widgets/logoWidget.dart';
 import 'package:goodmeal_test/widgets/wewBaseWidget.dart';
@@ -9,6 +10,7 @@ import 'package:goodmeal_test/widgets/wewBaseWidget.dart';
 import 'package:goodmeal_test/widgets/wewTextFormField.dart';
 
 class HomeScreen extends StatelessWidget {
+  static const String routeName = '/';
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, sizingInfo) {
@@ -96,13 +98,17 @@ class CityForm extends StatelessWidget {
                 style: TextStyle(color: Colors.white, fontSize: 18.0),
               ),
             ),
-            WewTextFormField(
-              hintText: "Busca cualquier ciudad del mundo",
-              sizingInfo: sizingInfo,
-              onTap: () async {
-                print("Se Apreta Textfield");
-                await CitiesRepository.instance.loadData();
-              },
+            Hero(
+              tag: 'SearchField',
+              child: WewTextFormField(
+                hintText: "Busca cualquier ciudad del mundo",
+                sizingInfo: sizingInfo,
+                onTap: () async {
+                  // print("Se Apreta Textfield");
+                  // await CitiesRepository.instance.loadData();
+                  Navigator.of(context).pushNamed(SearchScreen.routeName);
+                },
+              ),
             ),
           ],
         ),
