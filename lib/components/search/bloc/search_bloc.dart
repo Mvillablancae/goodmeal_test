@@ -45,14 +45,14 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     try {
       dynamic response = await _repository.getCityForecast(selected);
       if (response['status'] != 200) {
-        yield SearchFailed();
+        yield SearchFailed(errorMsje: response);
       } else {
         yield SearchCompleted(
             selectedCity: selected, forecast: response['data']);
       }
     } catch (e) {
       print("error:$e");
-      yield SearchFailed();
+      yield SearchFailed(errorMsje: {'status': 500, 'error': 'Revise su conexión a internet'});
     }
   }
 }

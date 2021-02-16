@@ -12,7 +12,9 @@ class SearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SearchBloc _bloc = BlocProvider.of<SearchBloc>(context);
+    FocusNode focusNode = FocusNode();
     return LayoutBuilder(builder: (context, sizingInfo) {
+      focusNode.requestFocus();
       return WewBaseWidget(
         child: SingleChildScrollView(
           child: Column(
@@ -26,6 +28,18 @@ class SearchScreen extends StatelessWidget {
                     tag: 'SearchField',
                     child: WewTextFormField(
                       hintText: "Busca cualquier ciudad del mundo",
+                      focusNode: focusNode,
+                      suffix: InkWell(
+                          onTap: () {
+                            CitiesRepository.instance.textController.text = '';
+                            _bloc.add(Search(
+                                searchString:
+                                    CitiesRepository.instance.searchingText));
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.all(sizingInfo.maxWidth * 0.02),
+                            child: Icon(Icons.close),
+                          )),
                       sizingInfo: sizingInfo,
                       onChange: (text) {
                         _bloc.add(Search(
@@ -42,12 +56,9 @@ class SearchScreen extends StatelessWidget {
                   if (state is SearchIdle) {
                     Navigator.of(context)
                         .pushReplacementNamed(HomeScreen.routeName);
-                  }
-                  if (state is SearchCompleted) {
+                  } else if (state is SearchCompleted) {
                     Navigator.of(context).pushNamed(SelectedCity.routeName);
-                  }
-                  if (state is SearchFailed) {
-                    print("error");
+                  } else if (state is SearchFailed) {
                     showDialog(
                         context: context,
                         child: AlertDialog(
