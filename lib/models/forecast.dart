@@ -1,5 +1,6 @@
 class Forecast {
-  const Forecast({this.hour,this.temp});
-  final String hour;
-  final String temp;
+  const Forecast({this.weather,this.min, this.max});
+  final String weather;
+  final String min;
+  final String max;
 }

@@ -21,22 +21,42 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   ) async* {
     if (event is Search)
       yield* _mapSearchToState(event.searchString);
-    else if (event is SelectCity) yield* _selectCityToState();
+    else if (event is SelectCity) yield* _selectCityToState(event.city);
+  }
+
+  @override
+  void onChange(Change<SearchState> change) {
+    super.onChange(change);
+    print(change);
   }
 
   Stream<SearchState> _mapSearchToState(String searchText) async* {
-    print("SearchingText: $searchText");
+
     yield SearchLoading();
     if (searchText?.length == 0)
       yield SearchIdle();
     else {
       List<City> cities = await _repository.filterCities(searchText);
-      print("Cities Length: ${cities.length}");
       yield SearchStarted(filteredCities: cities);
     }
   }
 
-  Stream<SearchState> _selectCityToState() async* {
-    //TODO: implement _selectCityToState
+  Stream<SearchState> _selectCityToState(City selected) async* {
+    yield SearchLoading();
+    try {
+      dynamic response = await _repository.getCityForecast(selected);
+      if (response['status'] != 200) {
+        yield SearchFailed();
+      } else {
+
+        yield SearchCompleted(
+            selectedCity: selected, forecast: response['data']);
+      }
+    } catch (e) {
+      print("error:$e");
+    }
+
+    //yield SearchFailed();
+    //yield SearchCompleted(selectedCity: selected);
   }
 }

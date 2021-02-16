@@ -38,12 +38,14 @@ class SearchScreen extends StatelessWidget {
               BlocConsumer(
                 cubit: BlocProvider.of<SearchBloc>(context),
                 listener: (context, state) {
-                  if (state is SearchIdle)
+                  if (state is SearchIdle) {
                     Navigator.of(context)
                         .pushReplacementNamed(HomeScreen.routeName);
-                  else if (state is SearchCompleted)
+                  } else if (state is SearchCompleted) {
                     Navigator.of(context)
                         .pushNamed(SelectedCityScreen.routeName);
+                  } else if (state is SearchFailed) {
+                  }
                 },
                 builder: (context, state) {
                   if (state is SearchStarted) {

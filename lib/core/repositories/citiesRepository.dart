@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:goodmeal_test/core/services/geographicDataService.dart';
 import 'package:goodmeal_test/models/city.dart';
+import 'package:goodmeal_test/models/cityForecast.dart';
+import 'package:goodmeal_test/models/forecast.dart';
 
 class CitiesRepository {
   static final CitiesRepository _instance = CitiesRepository();
@@ -73,5 +75,29 @@ class CitiesRepository {
     ReceivePort response = ReceivePort();
     port.send([msg, response.sendPort]);
     return response.first;
+  }
+
+  Future<dynamic> getCityForecast(City city) async {
+    Map<String, dynamic> data =
+        await _service.getCityForecast(lat: city.lat, lon: city.lon);
+    if (data['status'] != 200)
+      return data;
+    else {
+      List<Forecast> forecast = [];
+      print(data['data']['daily'].length);
+      List elements = data['data']['daily'];
+      for (int i = 0; i < 3; i++) {
+        forecast.add(
+          Forecast(
+              weather: elements[i]['weather'][0]['main'],
+              max: ((elements[i]['temp']['max'] - 32) * (5 / 9)).toString(),
+              min: ((elements[i]['temp']['min'] - 32) * (5 / 9)).toString()),
+        );
+      }
+      return {
+        'status': data['status'],
+        'data': CityForecast(threeDayForecast: forecast)
+      };
+    }
   }
 }

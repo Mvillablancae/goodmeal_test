@@ -103,8 +103,6 @@ class CityForm extends StatelessWidget {
                   hintText: "Busca cualquier ciudad del mundo",
                   sizingInfo: sizingInfo,
                   onChange: (_) async {
-                    print(
-                        "SearchingText: ${CitiesRepository.instance.searchingText}");
                     BlocProvider.of<SearchBloc>(context).add(Search(
                         searchString: CitiesRepository.instance.searchingText));
                   },
