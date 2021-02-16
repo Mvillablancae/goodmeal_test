@@ -25,29 +25,39 @@ class WewTextFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
-      child: TextFormField(
-        focusNode: focusNode,
-        textAlignVertical: TextAlignVertical.center,
-        onTap: onTap,
-        onChanged: onChange,
-        controller: _controller,
-        decoration: InputDecoration(
-          suffix: suffix,
-          filled: true,
-          hintText: hintText,
-          hintStyle: TextStyle(color: Color(0XFFAAAAAA), fontSize: 18.0),
-          fillColor: Colors.white,
-          contentPadding: EdgeInsets.only(left: sizingInfo.maxWidth * 0.05),
-          enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.white),
-              borderRadius: BorderRadius.circular(sizingInfo.maxHeight * 0.1)),
-          focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.white),
-              borderRadius: BorderRadius.circular(sizingInfo.maxHeight * 0.1)),
-          border: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.white),
-              borderRadius: BorderRadius.circular(sizingInfo.maxHeight * 0.1)),
-        ),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextFormField(
+              focusNode: focusNode,
+              textAlignVertical: TextAlignVertical.center,
+              onTap: onTap,
+              onChanged: onChange,
+              controller: _controller,
+              decoration: InputDecoration(
+                suffixIcon: suffix,
+                filled: true,
+                hintText: hintText,
+                hintStyle: TextStyle(color: Color(0XFFAAAAAA), fontSize: 18.0),
+                fillColor: Colors.white,
+                contentPadding:
+                    EdgeInsets.only(top: 10, left: sizingInfo.maxWidth * 0.05),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                    borderRadius:
+                        BorderRadius.circular(sizingInfo.maxHeight * 0.1)),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                    borderRadius:
+                        BorderRadius.circular(sizingInfo.maxHeight * 0.1)),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                    borderRadius:
+                        BorderRadius.circular(sizingInfo.maxHeight * 0.1)),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

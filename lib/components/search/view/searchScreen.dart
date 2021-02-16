@@ -30,16 +30,18 @@ class SearchScreen extends StatelessWidget {
                       hintText: "Busca cualquier ciudad del mundo",
                       focusNode: focusNode,
                       suffix: InkWell(
-                          onTap: () {
-                            CitiesRepository.instance.textController.text = '';
-                            _bloc.add(Search(
-                                searchString:
-                                    CitiesRepository.instance.searchingText));
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.all(sizingInfo.maxWidth * 0.02),
-                            child: Icon(Icons.close),
-                          )),
+                        onTap: () {
+                          CitiesRepository.instance.textController.text = '';
+                          _bloc.add(Search(
+                              searchString:
+                                  CitiesRepository.instance.searchingText));
+                        },
+                        child: Icon(Icons.close),
+                      ),
+                      // child: Padding(
+                      //   padding: EdgeInsets.all(sizingInfo.maxWidth * 0.02),
+                      //   child: Icon(Icons.close),
+                      // )),
                       sizingInfo: sizingInfo,
                       onChange: (text) {
                         _bloc.add(Search(
@@ -63,8 +65,13 @@ class SearchScreen extends StatelessWidget {
                         context: context,
                         child: AlertDialog(
                           title: Text('Ha ocurrido algo'),
-                          content: Center(
-                            child: Text("${state.errorMsje['error']}"),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Center(
+                                child: Text("${state.errorMsje['error']}"),
+                              ),
+                            ],
                           ),
                           actions: [
                             FlatButton(
