@@ -9,7 +9,7 @@ void main() {
 }
 
 class WeatherApp extends StatelessWidget {
-  AppRouter _router = AppRouter();
+  final AppRouter _router = AppRouter();
 
   @override
   Widget build(BuildContext context) {

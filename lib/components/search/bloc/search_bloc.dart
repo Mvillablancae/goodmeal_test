@@ -25,13 +25,12 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   @override
-  void onChange(Change<SearchState> change) {
-    super.onChange(change);
-    print(change);
+  void onTransition(Transition<SearchEvent, SearchState> transition) {
+    super.onTransition(transition);
+    print(transition);
   }
 
   Stream<SearchState> _mapSearchToState(String searchText) async* {
-
     yield SearchLoading();
     if (searchText?.length == 0)
       yield SearchIdle();
@@ -48,15 +47,12 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       if (response['status'] != 200) {
         yield SearchFailed();
       } else {
-
         yield SearchCompleted(
             selectedCity: selected, forecast: response['data']);
       }
     } catch (e) {
       print("error:$e");
+      yield SearchFailed();
     }
-
-    //yield SearchFailed();
-    //yield SearchCompleted(selectedCity: selected);
   }
 }

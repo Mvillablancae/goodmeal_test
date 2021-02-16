@@ -80,7 +80,7 @@ class CityForm extends StatelessWidget {
         cubit: BlocProvider.of<SearchBloc>(context),
         listener: (context, state) {
           if (state is SearchStarted)
-            Navigator.of(context).pushNamed(SearchScreen.routeName);
+            Navigator.of(context).pushReplacementNamed(SearchScreen.routeName);
         },
         child: Container(
           width: sizingInfo.maxWidth * 0.8,

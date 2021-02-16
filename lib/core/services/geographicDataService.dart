@@ -30,7 +30,8 @@ class GeographicDataService {
   }
 
   Future<dynamic> getCityForecast({String lat, String lon}) async {
-    Uri uri = Uri.https('api.openweathermap.org', 'data/2.5/onecall', {
+    try{
+      Uri uri = Uri.https('api.openweathermap.org', 'data/2.5/onecall', {
       'lat': lat,
       'lon': lon,
       'exclude': 'hourly, minutely, current',
@@ -44,6 +45,12 @@ class GeographicDataService {
       };
     } else {
       return {'status': response.statusCode, 'data': jsonDecode(response.body)};
+    }
+    }catch(e){
+      return {
+        'status': 500,
+        'error': 'Revise su conexión a internet'
+      };
     }
   }
 }

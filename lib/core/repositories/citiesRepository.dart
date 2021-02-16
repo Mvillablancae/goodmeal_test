@@ -78,26 +78,30 @@ class CitiesRepository {
   }
 
   Future<dynamic> getCityForecast(City city) async {
-    Map<String, dynamic> data =
-        await _service.getCityForecast(lat: city.lat, lon: city.lon);
-    if (data['status'] != 200)
-      return data;
-    else {
-      List<Forecast> forecast = [];
-      print(data['data']['daily'].length);
-      List elements = data['data']['daily'];
-      for (int i = 0; i < 3; i++) {
-        forecast.add(
-          Forecast(
-              weather: elements[i]['weather'][0]['main'],
-              max: ((elements[i]['temp']['max'] - 32) * (5 / 9)).toString(),
-              min: ((elements[i]['temp']['min'] - 32) * (5 / 9)).toString()),
-        );
+    try {
+      Map<String, dynamic> data =
+          await _service.getCityForecast(lat: city.lat, lon: city.lon);
+      if (data['status'] != 200)
+        return data;
+      else {
+        List<Forecast> forecast = [];
+        List elements = data['data']['daily'];
+        for (int i = 0; i < 3; i++) {
+          forecast.add(
+            Forecast(
+                weather: elements[i]['weather'][0]['main'],
+                max: ((elements[i]['temp']['max'] - 273.15).floor()).toString(),
+                min:
+                    ((elements[i]['temp']['min'] - 273.15).floor()).toString()),
+          );
+        }
+        return {
+          'status': data['status'],
+          'data': CityForecast(threeDayForecast: forecast)
+        };
       }
-      return {
-        'status': data['status'],
-        'data': CityForecast(threeDayForecast: forecast)
-      };
+    } catch (e) {
+      return {'status': 500, 'error': 'Revise su conexión a internet'};
     }
   }
 }

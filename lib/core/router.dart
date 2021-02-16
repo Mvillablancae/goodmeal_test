@@ -7,10 +7,8 @@ import 'package:goodmeal_test/components/search/view/searchScreen.dart';
 import 'package:goodmeal_test/components/search/view/selectedCity.dart';
 
 class AppRouter {
-
+  final SearchBloc _searchBloc = SearchBloc();
   Route onGenerateRoute(RouteSettings settings) {
-    SearchBloc _searchBloc = SearchBloc();
-
     switch (settings.name) {
       case HomeScreen.routeName:
         return MaterialPageRoute(
@@ -23,25 +21,19 @@ class AppRouter {
                     value: _searchBloc,
                   ),
                 ], child: HomeScreen()));
+      case SelectedCity.routeName:
+        return MaterialPageRoute(
+            builder: (context) => BlocProvider.value(
+                  value: _searchBloc,
+                  child: SelectedCity(),
+                ));
       case SearchScreen.routeName:
         return MaterialPageRoute(
             builder: (context) =>
                 BlocProvider.value(value: _searchBloc, child: SearchScreen()));
-      case SelectedCityScreen.routeName:
-        return MaterialPageRoute(
-            builder: (context) => BlocProvider.value(
-                value: _searchBloc, child: SelectedCityScreen()));
+
       default:
-        return MaterialPageRoute(
-            builder: (context) => MultiBlocProvider(providers: [
-                  BlocProvider(
-                    create: (context) => HomeBloc()..add(LoadData()),
-                    lazy: false,
-                  ),
-                  BlocProvider.value(
-                    value: _searchBloc,
-                  ),
-                ], child: HomeScreen()));
+        return MaterialPageRoute(builder: (context) => HomeScreen());
     }
   }
 }

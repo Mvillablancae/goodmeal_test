@@ -11,6 +11,7 @@ class SearchScreen extends StatelessWidget {
   static const String routeName = '/seachScreen';
   @override
   Widget build(BuildContext context) {
+    SearchBloc _bloc = BlocProvider.of<SearchBloc>(context);
     return LayoutBuilder(builder: (context, sizingInfo) {
       return WewBaseWidget(
         child: SingleChildScrollView(
@@ -26,8 +27,8 @@ class SearchScreen extends StatelessWidget {
                     child: WewTextFormField(
                       hintText: "Busca cualquier ciudad del mundo",
                       sizingInfo: sizingInfo,
-                      onChange: (text) async {
-                        BlocProvider.of<SearchBloc>(context).add(Search(
+                      onChange: (text) {
+                        _bloc.add(Search(
                             searchString:
                                 CitiesRepository.instance.searchingText));
                       },
@@ -36,15 +37,17 @@ class SearchScreen extends StatelessWidget {
                 ),
               ),
               BlocConsumer(
-                cubit: BlocProvider.of<SearchBloc>(context),
+                cubit: _bloc,
                 listener: (context, state) {
                   if (state is SearchIdle) {
-                    Navigator.of(context)
-                        .pushReplacementNamed(HomeScreen.routeName);
-                  } else if (state is SearchCompleted) {
-                    Navigator.of(context)
-                        .pushNamed(SelectedCityScreen.routeName);
-                  } else if (state is SearchFailed) {
+                    Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+                  }
+                  if (state is SearchCompleted) {
+                    Navigator.of(context).pushNamed(SelectedCity.routeName);
+                  }
+                  if (state is SearchFailed) {
+                    print("error");
+                    //TODO: Push AlertDialog
                   }
                 },
                 builder: (context, state) {
@@ -69,9 +72,8 @@ class SearchScreen extends StatelessWidget {
                                     ),
                                   ),
                                   onTap: () {
-                                    BlocProvider.of<SearchBloc>(context).add(
-                                        SelectCity(
-                                            city: state.filteredCities[index]));
+                                    _bloc.add(SelectCity(
+                                        city: state.filteredCities[index]));
                                   },
                                   title: Text(
                                     "${state.filteredCities[index].name}, ${CitiesRepository.instance.countries[state.filteredCities[index].country]['name']}",
