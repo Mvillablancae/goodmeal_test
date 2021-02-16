@@ -150,7 +150,7 @@ class DayDetailsRow extends StatelessWidget {
                 style: TextStyle(color: Colors.white, fontSize: 12),
               ),
               Text(
-                "${forecast.min}/${forecast.max}",
+                "${forecast.min}/${forecast.max} ºC",
                 style: TextStyle(color: Colors.white, fontSize: 22),
               )
             ],

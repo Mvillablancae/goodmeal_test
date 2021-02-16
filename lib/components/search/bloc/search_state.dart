@@ -16,7 +16,10 @@ class SearchStarted extends SearchState {
   }
 }
 
-class SearchFailed extends SearchState {}
+class SearchFailed extends SearchState {
+  SearchFailed({this.errorMsje});
+  final Map<String, dynamic> errorMsje;
+}
 
 class SearchLoading extends SearchState {}
 

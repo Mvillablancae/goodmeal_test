@@ -40,13 +40,29 @@ class SearchScreen extends StatelessWidget {
                 cubit: _bloc,
                 listener: (context, state) {
                   if (state is SearchIdle) {
-                    Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+                    Navigator.of(context)
+                        .pushReplacementNamed(HomeScreen.routeName);
                   }
                   if (state is SearchCompleted) {
                     Navigator.of(context).pushNamed(SelectedCity.routeName);
                   }
                   if (state is SearchFailed) {
                     print("error");
+                    showDialog(
+                        context: context,
+                        child: AlertDialog(
+                          title: Text('Ha ocurrido algo'),
+                          content: Center(
+                            child: Text("${state.errorMsje['error']}"),
+                          ),
+                          actions: [
+                            FlatButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text("Aceptar"))
+                          ],
+                        ));
                     //TODO: Push AlertDialog
                   }
                 },
