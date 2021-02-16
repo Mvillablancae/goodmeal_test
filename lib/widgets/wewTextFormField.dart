@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:goodmeal_test/core/repositories/citiesRepository.dart';
 
 class WewTextFormField extends StatelessWidget {
-  WewTextFormField({
-    Key key,
-    @required this.hintText,
-    @required this.sizingInfo,
-    this.onTap,
-    this.onChange,
-    this.suffix,
-    this.focusNode,
-  }) : super(key: key);
+  WewTextFormField(
+      {Key key,
+      @required this.hintText,
+      @required this.sizingInfo,
+      this.onTap,
+      this.onChange,
+      this.suffix,
+      this.focusNode,
+      this.autofocus})
+      : super(key: key);
 
   final String hintText;
   final BoxConstraints sizingInfo;
@@ -20,6 +21,7 @@ class WewTextFormField extends StatelessWidget {
       CitiesRepository.instance.textController;
   final FocusNode focusNode;
   final Widget suffix;
+  final bool autofocus;
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +36,7 @@ class WewTextFormField extends StatelessWidget {
               onTap: onTap,
               onChanged: onChange,
               controller: _controller,
+              autofocus: autofocus == null ? false : true,
               decoration: InputDecoration(
                 suffixIcon: suffix,
                 filled: true,

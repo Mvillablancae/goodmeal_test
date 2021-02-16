@@ -14,7 +14,6 @@ class SearchScreen extends StatelessWidget {
     SearchBloc _bloc = BlocProvider.of<SearchBloc>(context);
     FocusNode focusNode = FocusNode();
     return LayoutBuilder(builder: (context, sizingInfo) {
-      focusNode.requestFocus();
       return WewBaseWidget(
         child: SingleChildScrollView(
           child: Column(
@@ -44,9 +43,10 @@ class SearchScreen extends StatelessWidget {
                       // )),
                       sizingInfo: sizingInfo,
                       onChange: (text) {
-                        _bloc.add(Search(
-                            searchString:
-                                CitiesRepository.instance.searchingText));
+                        if (_bloc.isSearching)
+                          _bloc.add(Search(
+                              searchString:
+                                  CitiesRepository.instance.searchingText));
                       },
                     ),
                   ),
@@ -82,9 +82,10 @@ class SearchScreen extends StatelessWidget {
                           ],
                         ));
                     //TODO: Push AlertDialog
-                  }
+                  } else if (state is SearchStarted) focusNode.requestFocus();
                 },
                 builder: (context, state) {
+                  print("state is $state");
                   if (state is SearchStarted) {
                     if (state.filteredCities.length != 0)
                       return ListView.builder(
@@ -132,6 +133,9 @@ class SearchScreen extends StatelessWidget {
                         ),
                       );
                     }
+                  } else if (state is OpenedSearch) {
+                    focusNode.requestFocus();
+                    return Container();
                   } else
                     return Container(
                       height: sizingInfo.maxHeight * 0.2,

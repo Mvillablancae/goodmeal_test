@@ -79,7 +79,7 @@ class CityForm extends StatelessWidget {
       child: BlocListener(
         cubit: BlocProvider.of<SearchBloc>(context),
         listener: (context, state) {
-          if (state is SearchStarted)
+          if (state is OpenedSearch)
             Navigator.of(context).pushReplacementNamed(SearchScreen.routeName);
         },
         child: Container(
@@ -102,9 +102,8 @@ class CityForm extends StatelessWidget {
                 child: WewTextFormField(
                   hintText: "Busca cualquier ciudad del mundo",
                   sizingInfo: sizingInfo,
-                  onChange: (_) async {
-                    BlocProvider.of<SearchBloc>(context).add(Search(
-                        searchString: CitiesRepository.instance.searchingText));
+                  onTap: () async {
+                    BlocProvider.of<SearchBloc>(context).add(OpenSearch());
                   },
                 ),
               ),

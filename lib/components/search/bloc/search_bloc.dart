@@ -14,6 +14,13 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   SearchBloc() : super(SearchIdle());
 
   CitiesRepository _repository = CitiesRepository.instance;
+  bool _isSearching = false;
+
+  bool get isSearching => _isSearching;
+
+  void _changeSearchBarState() {
+    _isSearching = !_isSearching;
+  }
 
   @override
   Stream<SearchState> mapEventToState(
@@ -21,7 +28,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   ) async* {
     if (event is Search)
       yield* _mapSearchToState(event.searchString);
-    else if (event is SelectCity) yield* _selectCityToState(event.city);
+    else if (event is SelectCity)
+      yield* _selectCityToState(event.city);
+    else if (event is OpenSearch) yield OpenedSearch();
   }
 
   @override
@@ -32,10 +41,12 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   Stream<SearchState> _mapSearchToState(String searchText) async* {
     yield SearchLoading();
+    _changeSearchBarState();
     if (searchText?.length == 0)
       yield SearchIdle();
     else {
       List<City> cities = await _repository.filterCities(searchText);
+      _changeSearchBarState();
       yield SearchStarted(filteredCities: cities);
     }
   }
@@ -52,7 +63,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       }
     } catch (e) {
       print("error:$e");
-      yield SearchFailed(errorMsje: {'status': 500, 'error': 'Revise su conexión a internet'});
+      yield SearchFailed(
+          errorMsje: {'status': 500, 'error': 'Revise su conexión a internet'});
     }
   }
 }

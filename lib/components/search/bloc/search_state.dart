@@ -5,6 +5,8 @@ abstract class SearchState {}
 
 class SearchIdle extends SearchState {}
 
+class OpenedSearch extends SearchState {}
+
 class SearchStarted extends SearchState {
   SearchStarted({this.filteredCities});
 
