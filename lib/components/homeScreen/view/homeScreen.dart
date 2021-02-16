@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:goodmeal_test/components/homeScreen/bloc/home_bloc.dart';
 import 'package:goodmeal_test/components/homeScreen/view/localWeatherCard.dart';
+import 'package:goodmeal_test/components/search/bloc/search_bloc.dart';
+import 'package:goodmeal_test/components/search/view/searchScreen.dart';
 import 'package:goodmeal_test/core/repositories/citiesRepository.dart';
+import 'package:goodmeal_test/widgets/loadingScreen.dart';
 import 'package:goodmeal_test/widgets/logoWidget.dart';
 import 'package:goodmeal_test/widgets/wewBaseWidget.dart';
 
 import 'package:goodmeal_test/widgets/wewTextFormField.dart';
 
 class HomeScreen extends StatelessWidget {
+  static const String routeName = '/';
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, sizingInfo) {
@@ -17,54 +21,45 @@ class HomeScreen extends StatelessWidget {
           builder: (context, state) {
             if (state is HomeInitialized)
               return WewBaseWidget(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: sizingInfo.maxHeight * 0.05,
-                            left: sizingInfo.maxWidth * 0.1),
-                        child: Text(
-                          "Tu ubicación actual",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 22.0),
-                        ),
-                      ),
-                      HomeCard(sizingInfo: sizingInfo),
-                      CityForm(sizingInfo: sizingInfo),
-                    ],
-                  ),
-                  LogoWidget(
-                    sizingInfo: sizingInfo,
-                  ),
-                ],
-              );
-            else
-              return WewBaseWidget(children: [
-                Expanded(
-                  child: Center(
+                child: SingleChildScrollView(
+                  child: Container(
+                    height: sizingInfo.maxHeight -
+                        MediaQuery.of(context).padding.top,
+                    width: sizingInfo.maxWidth,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.max,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.all(sizingInfo.maxHeight * 0.04),
-                          child: Container(
-                              height: sizingInfo.maxHeight * 0.08,
-                              child: Image.asset('assets/img/Logo.png')),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: sizingInfo.maxHeight * 0.05,
+                                  left: sizingInfo.maxWidth * 0.1),
+                              child: Text(
+                                "Tu ubicación actual",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 22.0),
+                              ),
+                            ),
+                            HomeCard(sizingInfo: sizingInfo),
+                            CityForm(sizingInfo: sizingInfo),
+                          ],
                         ),
-                        CircularProgressIndicator(
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.white),
+                        LogoWidget(
+                          sizingInfo: sizingInfo,
                         ),
                       ],
                     ),
                   ),
-                )
-              ]);
+                ),
+              );
+            else
+              return LoadingScreen(sizingInfo: sizingInfo);
           });
     });
   }
@@ -81,30 +76,39 @@ class CityForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container(
-        width: sizingInfo.maxWidth * 0.8,
-        height: sizingInfo.maxHeight * 0.15,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(
-                  left: sizingInfo.maxWidth * 0.05,
-                  bottom: sizingInfo.maxHeight * 0.01),
-              child: Text(
-                "Conoce otros pronósticos",
-                style: TextStyle(color: Colors.white, fontSize: 18.0),
+      child: BlocListener(
+        cubit: BlocProvider.of<SearchBloc>(context),
+        listener: (context, state) {
+          if (state is OpenedSearch)
+            Navigator.of(context).pushReplacementNamed(SearchScreen.routeName);
+        },
+        child: Container(
+          width: sizingInfo.maxWidth * 0.8,
+          height: sizingInfo.maxHeight * 0.15,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                    left: sizingInfo.maxWidth * 0.05,
+                    bottom: sizingInfo.maxHeight * 0.01),
+                child: Text(
+                  "Conoce otros pronósticos",
+                  style: TextStyle(color: Colors.white, fontSize: 18.0),
+                ),
               ),
-            ),
-            WewTextFormField(
-              hintText: "Busca cualquier ciudad del mundo",
-              sizingInfo: sizingInfo,
-              onTap: () async {
-                print("Se Apreta Textfield");
-                await CitiesRepository.instance.loadData();
-              },
-            ),
-          ],
+              Hero(
+                tag: 'SearchField',
+                child: WewTextFormField(
+                  hintText: "Busca cualquier ciudad del mundo",
+                  sizingInfo: sizingInfo,
+                  onTap: () async {
+                    BlocProvider.of<SearchBloc>(context).add(OpenSearch());
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
