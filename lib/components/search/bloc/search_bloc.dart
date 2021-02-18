@@ -18,7 +18,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   bool get isSearching => _isSearching;
 
-  void _changeSearchBarState() {
+  void changeSearchBarState() {
     _isSearching = !_isSearching;
   }
 
@@ -41,13 +41,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   Stream<SearchState> _mapSearchToState(String searchText) async* {
     yield SearchLoading();
-    _changeSearchBarState();
-    if (searchText?.length == 0)
-      yield SearchIdle();
-    else {
-      List<City> cities = await _repository.filterCities(searchText);
-      _changeSearchBarState();
-      yield SearchStarted(filteredCities: cities);
+    if (_isSearching) {
+      if (searchText?.length == 0) {
+        changeSearchBarState();
+        yield SearchIdle();
+      } else {
+        List<City> cities = await _repository.filterCities(searchText);
+        changeSearchBarState();
+        yield SearchStarted(filteredCities: cities);
+      }
     }
   }
 

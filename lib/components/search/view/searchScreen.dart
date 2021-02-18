@@ -43,10 +43,14 @@ class SearchScreen extends StatelessWidget {
                       // )),
                       sizingInfo: sizingInfo,
                       onChange: (text) {
-                        if (_bloc.isSearching)
+                        print("isSearching: ${_bloc.isSearching}");
+                        if (!_bloc.isSearching) {
+                          _bloc.changeSearchBarState();
                           _bloc.add(Search(
                               searchString:
                                   CitiesRepository.instance.searchingText));
+                        } else
+                          print("Ya está buscando: ${_bloc.isSearching}");
                       },
                     ),
                   ),
