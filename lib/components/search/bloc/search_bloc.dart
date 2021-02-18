@@ -26,7 +26,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   set changeCurrentWord(String text) => _currentWord = text;
 
-  String lastSearchedWord = "";
+  String _lastSearchedWord = "";
+
+  String get getlastSearchedWord =>
+      _lastSearchedWord;
 
   bool _keepSearching = true;
   set setKeepSearching(bool flag) => _keepSearching = flag;
@@ -54,27 +57,18 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     _keepSearching = true;
     _isSearching = true;
     while (_keepSearching) {
-      print(
-          "Estoy en el ciclo: 1 - ${_currentWord.length == 0}, 2 - $_isSearching");
       if (_currentWord.length == 0) {
-        print("_isSearching? => $_isSearching");
         if (_isSearching) changeSearchBarState();
         _keepSearching = false;
         yield SearchIdle();
       } else if (_isSearching) {
-        print(
-            "Estoy buscando ahora! (current word = $_currentWord, lastSearchedWord = $lastSearchedWord)");
         cities = await _repository.filterCities(_currentWord);
-        print(
-            "¿lastSearchedWord == _currentWord? => ${lastSearchedWord == _currentWord}");
-        if (lastSearchedWord == _currentWord) {
+        if (_lastSearchedWord == _currentWord) {
           _keepSearching = false;
           changeSearchBarState();
           yield SearchStarted(filteredCities: cities);
         } else {
-          print(
-              "ELSE: (current word = $_currentWord, lastSearchedWord = $lastSearchedWord)");
-          lastSearchedWord = _currentWord;
+          _lastSearchedWord = _currentWord;
         }
       }
     }
@@ -91,7 +85,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
             selectedCity: selected, forecast: response['data']);
       }
     } catch (e) {
-      print("error:$e");
       yield SearchFailed(
           errorMsje: {'status': 500, 'error': 'Revise su conexión a internet'});
     }

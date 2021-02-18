@@ -53,8 +53,6 @@ class CitiesRepository {
       SendPort replyTo = msg[1];
 
       List<City> filtering = [];
-      print(
-          "SearchValue Inicial Mayus ${data['searchValue'][0].toString().toUpperCase()}");
       if (data['cities'][data['searchValue'][0].toString().toUpperCase()] ==
               null ||
           data['cities'][data['searchValue'][0].toString().toUpperCase()]
@@ -69,8 +67,6 @@ class CitiesRepository {
       } else {
         for (var element in data['cities']
             [data['searchValue'][0].toString().toUpperCase()]) {
-          print(
-              "Element name: ${element.name.toUpperCase()}, SearchValue: ${data['searchValue'].toUpperCase()}");
           if (element.name
               .toUpperCase()
               .startsWith(data['searchValue'].toUpperCase()))
