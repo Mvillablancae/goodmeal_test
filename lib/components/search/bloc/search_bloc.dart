@@ -18,9 +18,21 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   bool get isSearching => _isSearching;
 
-  void _changeSearchBarState() {
+  void changeSearchBarState() {
     _isSearching = !_isSearching;
   }
+
+  String _currentWord = "";
+
+  set changeCurrentWord(String text) => _currentWord = text;
+
+  String _lastSearchedWord = "";
+
+  String get getlastSearchedWord =>
+      _lastSearchedWord;
+
+  bool _keepSearching = true;
+  set setKeepSearching(bool flag) => _keepSearching = flag;
 
   @override
   Stream<SearchState> mapEventToState(
@@ -40,14 +52,25 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   Stream<SearchState> _mapSearchToState(String searchText) async* {
+    List<City> cities;
     yield SearchLoading();
-    _changeSearchBarState();
-    if (searchText?.length == 0)
-      yield SearchIdle();
-    else {
-      List<City> cities = await _repository.filterCities(searchText);
-      _changeSearchBarState();
-      yield SearchStarted(filteredCities: cities);
+    _keepSearching = true;
+    _isSearching = true;
+    while (_keepSearching) {
+      if (_currentWord.length == 0) {
+        if (_isSearching) changeSearchBarState();
+        _keepSearching = false;
+        yield SearchIdle();
+      } else if (_isSearching) {
+        cities = await _repository.filterCities(_currentWord);
+        if (_lastSearchedWord == _currentWord) {
+          _keepSearching = false;
+          changeSearchBarState();
+          yield SearchStarted(filteredCities: cities);
+        } else {
+          _lastSearchedWord = _currentWord;
+        }
+      }
     }
   }
 
@@ -62,7 +85,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
             selectedCity: selected, forecast: response['data']);
       }
     } catch (e) {
-      print("error:$e");
       yield SearchFailed(
           errorMsje: {'status': 500, 'error': 'Revise su conexión a internet'});
     }

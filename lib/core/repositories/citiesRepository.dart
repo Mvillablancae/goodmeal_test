@@ -53,13 +53,20 @@ class CitiesRepository {
       SendPort replyTo = msg[1];
 
       List<City> filtering = [];
-      if (data['cities'][data['searchValue'][0]] == null ||
-          data['cities'][data['searchValue'][0]].length == 0)
+      if (data['cities'][data['searchValue'][0].toString().toUpperCase()] ==
+              null ||
+          data['cities'][data['searchValue'][0].toString().toUpperCase()]
+                  .length ==
+              0)
         replyTo.send(filtering);
       else if (data['searchValue'].length == 1) {
-        replyTo.send(data['cities'][data['searchValue']].take(10).toList());
+        replyTo.send(data['cities']
+                [data['searchValue'].toString().toUpperCase()]
+            .take(10)
+            .toList());
       } else {
-        for (var element in data['cities'][data['searchValue'][0]]) {
+        for (var element in data['cities']
+            [data['searchValue'][0].toString().toUpperCase()]) {
           if (element.name
               .toUpperCase()
               .startsWith(data['searchValue'].toUpperCase()))
