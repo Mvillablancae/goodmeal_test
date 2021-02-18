@@ -13,6 +13,9 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     SearchBloc _bloc = BlocProvider.of<SearchBloc>(context);
     FocusNode focusNode = FocusNode();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusScope.of(context).requestFocus(focusNode);
+    });
     return LayoutBuilder(builder: (context, sizingInfo) {
       return WewBaseWidget(
         child: SingleChildScrollView(
@@ -31,21 +34,18 @@ class SearchScreen extends StatelessWidget {
                       suffix: InkWell(
                         onTap: () {
                           CitiesRepository.instance.textController.text = '';
+                          _bloc.changeCurrentWord = '';
                           _bloc.add(Search(
                               searchString:
                                   CitiesRepository.instance.searchingText));
                         },
                         child: Icon(Icons.close),
                       ),
-                      // child: Padding(
-                      //   padding: EdgeInsets.all(sizingInfo.maxWidth * 0.02),
-                      //   child: Icon(Icons.close),
-                      // )),
                       sizingInfo: sizingInfo,
                       onChange: (text) {
+                        _bloc.changeCurrentWord = text;
                         print("isSearching: ${_bloc.isSearching}");
                         if (!_bloc.isSearching) {
-                          _bloc.changeSearchBarState();
                           _bloc.add(Search(
                               searchString:
                                   CitiesRepository.instance.searchingText));
@@ -86,7 +86,8 @@ class SearchScreen extends StatelessWidget {
                           ],
                         ));
                     //TODO: Push AlertDialog
-                  } else if (state is SearchStarted) focusNode.requestFocus();
+                  } else if (state is SearchStarted)
+                    print("SearchStarted"); //focusNode.requestFocus();
                 },
                 builder: (context, state) {
                   print("state is $state");
@@ -138,7 +139,6 @@ class SearchScreen extends StatelessWidget {
                       );
                     }
                   } else if (state is OpenedSearch) {
-                    focusNode.requestFocus();
                     return Container();
                   } else
                     return Container(

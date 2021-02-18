@@ -22,6 +22,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     _isSearching = !_isSearching;
   }
 
+  String _currentWord = "";
+
+  set changeCurrentWord(String text) => _currentWord = text;
+
+  String lastSearchedWord = "";
+
+  bool _keepSearching = true;
+  set setKeepSearching(bool flag) => _keepSearching = flag;
+
   @override
   Stream<SearchState> mapEventToState(
     SearchEvent event,
@@ -40,15 +49,33 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   Stream<SearchState> _mapSearchToState(String searchText) async* {
+    List<City> cities;
     yield SearchLoading();
-    if (_isSearching) {
-      if (searchText?.length == 0) {
-        changeSearchBarState();
+    _keepSearching = true;
+    _isSearching = true;
+    while (_keepSearching) {
+      print(
+          "Estoy en el ciclo: 1 - ${_currentWord.length == 0}, 2 - $_isSearching");
+      if (_currentWord.length == 0) {
+        print("_isSearching? => $_isSearching");
+        if (_isSearching) changeSearchBarState();
+        _keepSearching = false;
         yield SearchIdle();
-      } else {
-        List<City> cities = await _repository.filterCities(searchText);
-        changeSearchBarState();
-        yield SearchStarted(filteredCities: cities);
+      } else if (_isSearching) {
+        print(
+            "Estoy buscando ahora! (current word = $_currentWord, lastSearchedWord = $lastSearchedWord)");
+        cities = await _repository.filterCities(_currentWord);
+        print(
+            "¿lastSearchedWord == _currentWord? => ${lastSearchedWord == _currentWord}");
+        if (lastSearchedWord == _currentWord) {
+          _keepSearching = false;
+          changeSearchBarState();
+          yield SearchStarted(filteredCities: cities);
+        } else {
+          print(
+              "ELSE: (current word = $_currentWord, lastSearchedWord = $lastSearchedWord)");
+          lastSearchedWord = _currentWord;
+        }
       }
     }
   }
