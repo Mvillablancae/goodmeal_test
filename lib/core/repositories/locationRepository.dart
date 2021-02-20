@@ -30,6 +30,7 @@ class LocationRepository {
     }
     try {
       _locationData = await location.getLocation();
+      print("_locationData: ${_locationData.toString()}");
       return {
         "lat": _locationData.latitude.toString(),
         "lon": _locationData.longitude.toString()

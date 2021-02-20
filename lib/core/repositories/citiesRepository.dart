@@ -93,16 +93,11 @@ class CitiesRepository {
         return data;
       else {
         Forecast forecast = Forecast(
-            weather: data[0]['weather'][0]['main'],
-            max: ((data[0]['temp']['max'] - 273.15).floor()).toString(),
-            min: ((data[0]['temp']['min'] - 273.15).floor()).toString());
-
-        final coordinates = new Coordinates(1.10, 45.50);
-        var addresses =
-            await Geocoder.local.findAddressesFromCoordinates(coordinates);
-        var first = addresses.first;
-        print("${first.featureName} : ${first.addressLine}");
-        print("${addresses.toList().toString()}");
+            weather: data["data"]["daily"][0]['weather'][0]['main'],
+            max: ((data["data"]["daily"][0]['temp']['max'] - 273.15).floor())
+                .toString(),
+            min: ((data["data"]["daily"][0]['temp']['min'] - 273.15).floor())
+                .toString());
 
         return {
           'status': data['status'],
@@ -110,7 +105,7 @@ class CitiesRepository {
         };
       }
     } catch (e) {
-      return {'status': 500, 'error': 'Revise su conexión a internet'};
+      return {'status': 500, 'error': '$e'};
     }
   }
 
@@ -120,8 +115,8 @@ class CitiesRepository {
         lat: lat,
         lon: lon,
       );
-      if (name["error"] != null) {
-        return {"status": 200, "cityName": name["cityName"]};
+      if (name["error"] == null) {
+        return {"status": 200, "cityName": name["cityName"],"country": name["country"]};
       } else {
         return {
           "status": 500,

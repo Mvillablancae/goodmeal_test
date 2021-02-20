@@ -27,6 +27,13 @@ class CurrentweatherBloc
     // TODO: implement mapEventToState
   }
 
+  @override
+  void onTransition(
+      Transition<CurrentweatherEvent, CurrentweatherState> transition) {
+    super.onTransition(transition);
+    print(transition.toString());
+  }
+
   Stream<CurrentweatherState> _mapLoadCurrentWeatherToState() async* {
     yield CurrentweatherLoading();
     try {
@@ -36,10 +43,23 @@ class CurrentweatherBloc
       if (currentLocationCoordinates["error"] == null) {
         dynamic localForecast = await _citiesRepository.getCurrentForecast(
             lat: currentLocationCoordinates["lat"],
-            lon: currentLocationCoordinates["lat"]);
+            lon: currentLocationCoordinates["lon"]);
         if (localForecast["error"] == null) {
-          dynamic cityName = _citiesRepository.getCityName(lat: currentLocationCoordinates["lat"] ,lon:currentLocationCoordinates["lon"]);
-          yield CurrentweatherLoaded(forecast: localForecast["data"],city: City(name:cityName, lat:currentLocationCoordinates["lat"], lon:currentLocationCoordinates["lon"] ) );
+          dynamic cityName = await _citiesRepository.getCityName(
+              lat: currentLocationCoordinates["lat"],
+              lon: currentLocationCoordinates["lon"]);
+          if (cityName["error"] == null) {
+            yield CurrentweatherLoaded(
+                forecast: localForecast["data"],
+                city: City(
+                    name: cityName["cityName"],
+                    country: cityName["country"],
+                    lat: currentLocationCoordinates["lat"],
+                    lon: currentLocationCoordinates["lon"]));
+          } else {
+            CurrentweatherFailed(
+                error: {"status": 500, "error": localForecast["error"]});
+          }
         } else {
           yield CurrentweatherFailed(
               error: {"status": 500, "error": localForecast["error"]});
@@ -52,7 +72,8 @@ class CurrentweatherBloc
       }
     } catch (e) {
       print("(Current Weather)Error: $e");
-      yield CurrentweatherFailed();
+      yield CurrentweatherFailed(
+          error: {"status": 500, "error": "Error Desconocido"});
     }
   }
 }
