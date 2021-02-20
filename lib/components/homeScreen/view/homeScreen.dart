@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:goodmeal_test/components/homeScreen/bloc/home_bloc.dart';
-import 'package:goodmeal_test/components/homeScreen/view/localWeatherCard.dart';
+import 'package:goodmeal_test/components/currentWeatherCard/view/localWeatherCard.dart';
 import 'package:goodmeal_test/components/search/bloc/search_bloc.dart';
 import 'package:goodmeal_test/components/search/view/searchScreen.dart';
 import 'package:goodmeal_test/core/repositories/citiesRepository.dart';
