@@ -1,4 +1,4 @@
-import 'package:goodmeal_test/models/forecast.dart';
+import 'package:goodmeal_test/core/models/forecast.dart';
 
 class CityForecast {
   CityForecast(

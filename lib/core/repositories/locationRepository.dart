@@ -3,6 +3,9 @@ import 'package:location/location.dart';
 class LocationRepository {
   LocationRepository();
 
+  static final LocationRepository _instance = LocationRepository();
+  static LocationRepository get instance => _instance;
+
   Location location = new Location();
 
   bool _serviceEnabled;
@@ -15,7 +18,6 @@ class LocationRepository {
       _serviceEnabled = await location.requestService();
       if (!_serviceEnabled) {
         return {"error": "La ubicación no está activada."};
-        ;
       }
     }
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:goodmeal_test/utils/colors.dart' as colors;
+import 'package:goodmeal_test/core/utils/colors.dart' as colors;
 
 class WewBaseWidget extends StatelessWidget {
   const WewBaseWidget({

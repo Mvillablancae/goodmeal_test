@@ -3,10 +3,11 @@ import 'dart:isolate';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:goodmeal_test/core/services/geographicDataService.dart';
-import 'package:goodmeal_test/models/city.dart';
-import 'package:goodmeal_test/models/cityForecast.dart';
-import 'package:goodmeal_test/models/forecast.dart';
+import 'package:goodmeal_test/core/models/city.dart';
+import 'package:goodmeal_test/core/models/cityForecast.dart';
+import 'package:goodmeal_test/core/models/forecast.dart';
 
 class CitiesRepository {
   static final CitiesRepository _instance = CitiesRepository();
@@ -82,6 +83,57 @@ class CitiesRepository {
     ReceivePort response = ReceivePort();
     port.send([msg, response.sendPort]);
     return response.first;
+  }
+
+  Future<dynamic> getCurrentForecast({String lat, String lon}) async {
+    try {
+      Map<String, dynamic> data =
+          await _service.getCityForecast(lat: lat, lon: lon);
+      if (data['status'] != 200)
+        return data;
+      else {
+        Forecast forecast = Forecast(
+            weather: data[0]['weather'][0]['main'],
+            max: ((data[0]['temp']['max'] - 273.15).floor()).toString(),
+            min: ((data[0]['temp']['min'] - 273.15).floor()).toString());
+
+        final coordinates = new Coordinates(1.10, 45.50);
+        var addresses =
+            await Geocoder.local.findAddressesFromCoordinates(coordinates);
+        var first = addresses.first;
+        print("${first.featureName} : ${first.addressLine}");
+        print("${addresses.toList().toString()}");
+
+        return {
+          'status': data['status'],
+          'data': forecast,
+        };
+      }
+    } catch (e) {
+      return {'status': 500, 'error': 'Revise su conexión a internet'};
+    }
+  }
+
+  Future<Map<String, dynamic>> getCityName({String lat, String lon}) async {
+    try {
+      var name = await _service.getCityName(
+        lat: lat,
+        lon: lon,
+      );
+      if (name["error"] != null) {
+        return {"status": 200, "cityName": name["cityName"]};
+      } else {
+        return {
+          "status": 500,
+          "error": "Error al obtener el nombre de la ciudad"
+        };
+      }
+    } catch (e) {
+      return {
+        "status": 500,
+        "error": "Error al obtener el nombre de la ciudad"
+      };
+    }
   }
 
   Future<dynamic> getCityForecast(City city) async {

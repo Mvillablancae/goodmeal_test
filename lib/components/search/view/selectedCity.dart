@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:goodmeal_test/components/search/bloc/search_bloc.dart';
 import 'package:goodmeal_test/core/repositories/citiesRepository.dart';
-import 'package:goodmeal_test/models/forecast.dart';
-import 'package:goodmeal_test/widgets/loadingScreen.dart';
-import 'package:goodmeal_test/widgets/logoWidget.dart';
-import 'package:goodmeal_test/widgets/wewBaseWidget.dart';
-import 'package:goodmeal_test/utils/colors.dart' as colors;
+import 'package:goodmeal_test/core/models/forecast.dart';
+import 'package:goodmeal_test/core/widgets/loadingScreen.dart';
+import 'package:goodmeal_test/core/widgets/logoWidget.dart';
+import 'package:goodmeal_test/core/widgets/wewBaseWidget.dart';
+import 'package:goodmeal_test/core/utils/colors.dart' as colors;
 
 class SelectedCity extends StatelessWidget {
   static const String routeName = '/city';

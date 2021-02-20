@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:goodmeal_test/core/repositories/citiesRepository.dart';
-import 'package:goodmeal_test/models/city.dart';
-import 'package:goodmeal_test/models/cityForecast.dart';
+import 'package:goodmeal_test/core/models/city.dart';
+import 'package:goodmeal_test/core/models/cityForecast.dart';
 import 'package:meta/meta.dart';
 
 part 'search_event.dart';
