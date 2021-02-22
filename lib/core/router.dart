@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:goodmeal_test/components/currentWeatherCard/bloc/currentweather_bloc.dart';
 import 'package:goodmeal_test/components/homeScreen/bloc/home_bloc.dart';
 import 'package:goodmeal_test/components/homeScreen/view/homeScreen.dart';
 import 'package:goodmeal_test/components/search/bloc/search_bloc.dart';
@@ -15,6 +16,10 @@ class AppRouter {
             builder: (context) => MultiBlocProvider(providers: [
                   BlocProvider(
                     create: (context) => HomeBloc()..add(LoadData()),
+                    lazy: false,
+                  ),
+                  BlocProvider(
+                    create: (context) => CurrentweatherBloc()..add(LoadCurrentWeather()),
                     lazy: false,
                   ),
                   BlocProvider.value(

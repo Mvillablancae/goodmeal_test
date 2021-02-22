@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:goodmeal_test/components/homeScreen/bloc/home_bloc.dart';
-import 'package:goodmeal_test/components/homeScreen/view/localWeatherCard.dart';
+import 'package:goodmeal_test/components/currentWeatherCard/view/localWeatherCard.dart';
 import 'package:goodmeal_test/components/search/bloc/search_bloc.dart';
 import 'package:goodmeal_test/components/search/view/searchScreen.dart';
 import 'package:goodmeal_test/core/repositories/citiesRepository.dart';
-import 'package:goodmeal_test/widgets/loadingScreen.dart';
-import 'package:goodmeal_test/widgets/logoWidget.dart';
-import 'package:goodmeal_test/widgets/wewBaseWidget.dart';
+import 'package:goodmeal_test/core/widgets/loadingScreen.dart';
+import 'package:goodmeal_test/core/widgets/logoWidget.dart';
+import 'package:goodmeal_test/core/widgets/wewBaseWidget.dart';
 
-import 'package:goodmeal_test/widgets/wewTextFormField.dart';
+import 'package:goodmeal_test/core/widgets/wewTextFormField.dart';
 
 class HomeScreen extends StatelessWidget {
   static const String routeName = '/';

@@ -2,21 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:goodmeal_test/components/search/bloc/search_bloc.dart';
 import 'package:goodmeal_test/core/repositories/citiesRepository.dart';
-import 'package:goodmeal_test/models/forecast.dart';
-import 'package:goodmeal_test/widgets/logoWidget.dart';
-import 'package:goodmeal_test/widgets/wewBaseWidget.dart';
-import 'package:goodmeal_test/utils/colors.dart' as colors;
+import 'package:goodmeal_test/core/models/forecast.dart';
+import 'package:goodmeal_test/core/widgets/loadingScreen.dart';
+import 'package:goodmeal_test/core/widgets/logoWidget.dart';
+import 'package:goodmeal_test/core/widgets/wewBaseWidget.dart';
+import 'package:goodmeal_test/core/utils/colors.dart' as colors;
 
 class SelectedCity extends StatelessWidget {
   static const String routeName = '/city';
-
+  SearchBloc _bloc;
   @override
   Widget build(BuildContext context) {
-    SearchBloc _bloc = BlocProvider.of<SearchBloc>(context);
+    _bloc = BlocProvider.of<SearchBloc>(context);
 
     return LayoutBuilder(builder: (context, sizingInfo) {
-      return BlocBuilder(
+      return BlocConsumer(
           cubit: _bloc,
+          listener: (context, state) {
+            if (state is SearchStarted) Navigator.pop(context);
+          },
           builder: (context, state) {
             if (state is SearchCompleted) {
               return WewBaseWidget(
@@ -33,7 +37,8 @@ class SelectedCity extends StatelessWidget {
                                 Icons.arrow_back,
                                 color: Colors.white,
                               ),
-                              onPressed: () => Navigator.of(context).pop()),
+                              onPressed: () => _bloc.add(Search(
+                                  searchString: _bloc.getlastSearchedWord))),
                           Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: sizingInfo.maxWidth * 0.05,
@@ -86,14 +91,10 @@ class SelectedCity extends StatelessWidget {
                   ),
                 ],
               ));
-            } else {
-              Navigator.of(context).pop();
-              return WewBaseWidget(
-                child: Container(
-                  color: Colors.green,
-                ),
+            } else
+              return LoadingScreen(
+                sizingInfo: sizingInfo,
               );
-            }
           });
     });
   }
