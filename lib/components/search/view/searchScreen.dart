@@ -4,8 +4,8 @@ import 'package:goodmeal_test/components/homeScreen/view/homeScreen.dart';
 import 'package:goodmeal_test/components/search/bloc/search_bloc.dart';
 import 'package:goodmeal_test/components/search/view/selectedCity.dart';
 import 'package:goodmeal_test/core/repositories/citiesRepository.dart';
-import 'package:goodmeal_test/widgets/wewBaseWidget.dart';
-import 'package:goodmeal_test/widgets/wewTextFormField.dart';
+import 'package:goodmeal_test/core/widgets/wewBaseWidget.dart';
+import 'package:goodmeal_test/core/widgets/wewTextFormField.dart';
 
 class SearchScreen extends StatelessWidget {
   static const String routeName = "/Search";

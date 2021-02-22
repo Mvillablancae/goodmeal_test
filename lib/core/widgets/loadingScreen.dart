@@ -2,7 +2,7 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:goodmeal_test/widgets/wewBaseWidget.dart';
+import 'package:goodmeal_test/core/widgets/wewBaseWidget.dart';
 
 class LoadingScreen extends StatelessWidget {
   const LoadingScreen({
